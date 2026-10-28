@@ -524,6 +524,8 @@ BEGIN
         MENUITEM "Edit Clip",                   32860
         MENUITEM "New Clip",                    32867
         MENUITEM SEPARATOR
+        MENUITEM "Rename Clip",                 ID_MENU_RENAME_CLIP
+        MENUITEM "Assign Clip Hot Key",         ID_MENU_ASSIGN_CLIP_HOTKEY
         MENUITEM "Properties",                  32776
         POPUP "Quick Properties"
         BEGIN

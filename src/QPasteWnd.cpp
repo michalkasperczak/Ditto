@@ -122,6 +122,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_EXITPROGRAM, OnMenuExitprogram)
 	ON_COMMAND(ID_MENU_TOGGLECONNECTCV, OnMenuToggleConnectCV)
 	ON_COMMAND(ID_MENU_PROPERTIES, OnMenuProperties)
+	ON_COMMAND(ID_MENU_RENAME_CLIP, OnMenuRenameClip)
+	ON_COMMAND(ID_MENU_ASSIGN_CLIP_HOTKEY, OnMenuAssignClipHotKey)
 	ON_WM_CLOSE()
 	ON_NOTIFY(LVN_BEGINDRAG, ID_LIST_HEADER, OnBegindrag)
 	ON_WM_SYSKEYDOWN()
@@ -175,6 +177,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_UPDATE_COMMAND_UI(ID_MENU_PASTEPLAINTEXTONLY, OnUpdateMenuPasteplaintextonly)
 	ON_UPDATE_COMMAND_UI(ID_MENU_DELETE, OnUpdateMenuDelete)
 	ON_UPDATE_COMMAND_UI(ID_MENU_PROPERTIES, OnUpdateMenuProperties)
+	ON_UPDATE_COMMAND_UI(ID_MENU_RENAME_CLIP, OnUpdateMenuRenameClip)
+	ON_UPDATE_COMMAND_UI(ID_MENU_ASSIGN_CLIP_HOTKEY, OnUpdateMenuAssignClipHotKey)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_POSIXIFY_PATHS, &CQPasteWnd::OnUpdateSpecialPosixifyPaths)
 	ON_COMMAND(ID_QUICKOPTIONS_PROMPTTODELETECLIP, OnPromptToDeleteClip)
 	ON_COMMAND(ID_STICKYCLIPS_MAKETOPSTICKYCLIP, OnMakeTopStickyClip)
@@ -2203,6 +2207,16 @@ void CQPasteWnd::OnMenuProperties()
 	this->DoAction(ActionEnums::CLIP_PROPERTIES);
 }
 
+void CQPasteWnd::OnMenuRenameClip()
+{
+	this->DoAction(ActionEnums::RENAME_CLIP);
+}
+
+void CQPasteWnd::OnMenuAssignClipHotKey()
+{
+	this->DoAction(ActionEnums::ASSIGN_CLIP_HOTKEY);
+}
+
 void CQPasteWnd::UpdateFont()
 {
 	LOGFONT lf;
@@ -3237,6 +3251,12 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::CLIP_PROPERTIES:
 		ret = DoActionClipProperties();
 		break;
+	case ActionEnums::RENAME_CLIP:
+		ret = DoActionClipProperties(CCopyProperties::INITIAL_FOCUS_ITEM_TITLE);
+		break;
+	case ActionEnums::ASSIGN_CLIP_HOTKEY:
+		ret = DoActionClipProperties(CCopyProperties::INITIAL_FOCUS_HOT_KEY);
+		break;
 	case ActionEnums::PASTE_SELECTED_PLAIN_TEXT:
 		ret = DoActionPasteSelectedPlainText();
 		break;
@@ -4137,7 +4157,7 @@ bool CQPasteWnd::DoActionDeleteSelected()
 	return false;
 }
 
-bool CQPasteWnd::DoActionClipProperties()
+bool CQPasteWnd::DoActionClipProperties(CCopyProperties::InitialFocus initialFocus)
 {
 	bool ret = false;
 
@@ -4166,15 +4186,15 @@ bool CQPasteWnd::DoActionClipProperties()
 		m_lstHeader.RemoveAllSelection();
 		m_lstHeader.SetSelection(row);
 
-		ret = ShowProperties(id, row);
+		ret = ShowProperties(id, row, initialFocus);
 
 		m_lstHeader.SetListPos(row);
 	}
 
-	return false;
+	return ret;
 }
 
-bool CQPasteWnd::ShowProperties(int id, int row)
+bool CQPasteWnd::ShowProperties(int id, int row, CCopyProperties::InitialFocus initialFocus)
 {
 	if (id < 0)
 	{
@@ -4185,7 +4205,7 @@ bool CQPasteWnd::ShowProperties(int id, int row)
 
 	CDimWnd dimmer(this);
 
-	CCopyProperties props(id, this);
+	CCopyProperties props(id, this, NULL, initialFocus);
 	INT_PTR doModalRet = props.DoModal();
 
 	if (doModalRet == IDOK)
@@ -6388,6 +6408,26 @@ void CQPasteWnd::OnUpdateMenuProperties(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::CLIP_PROPERTIES);
+}
+
+void CQPasteWnd::OnUpdateMenuRenameClip(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::RENAME_CLIP);
+}
+
+void CQPasteWnd::OnUpdateMenuAssignClipHotKey(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::ASSIGN_CLIP_HOTKEY);
 }
 
 void CQPasteWnd::OnUpdateMenuEdititem(CCmdUI* pCmdUI)

@@ -18,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 // CCopyProperties dialog
 
 
-CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent, CClip *pMemoryClip)
+CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent, CClip *pMemoryClip, InitialFocus initialFocus)
 	: CDialog(CCopyProperties::IDD, pParent)
 {
 	m_lCopyID = lCopyID;
@@ -29,6 +29,7 @@ CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent, CClip *pMemoryClip
 	m_lGroupChangedTo = -1;
 	m_pMemoryClip = pMemoryClip;
 	m_bSetToTopMost = true;
+	m_initialFocus = initialFocus;
 
 	//{{AFX_DATA_INIT(CCopyProperties)
 	m_eDate = _T("");
@@ -104,15 +105,6 @@ BOOL CCopyProperties::OnInitDialog()
 	if(m_bSetToTopMost)
 		SetWindowPos(&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 
-	if(m_lCopyID == -1 && m_pMemoryClip != NULL)
-	{
-		GetDlgItem(IDOK)->SetFocus();
-	}
-	else
-	{
-		m_description.SetFocus();
-	}
-	
 	m_Resize.SetParent(m_hWnd);
 	m_Resize.AddControl(IDC_EDIT_PROPERTIES, DR_SizeHeight | DR_SizeWidth);
 	m_Resize.AddControl(IDC_STATIC_FORMATS, DR_MoveTop);
@@ -134,6 +126,23 @@ BOOL CCopyProperties::OnInitDialog()
 		CString newText;
 		newText.Format(_T("%s - %d"), text, m_clip.ID());
 		this->SetWindowText(newText);
+	}
+
+	if(m_lCopyID == -1 && m_pMemoryClip != NULL)
+	{
+		GetDlgItem(IDOK)->SetFocus();
+	}
+	else if(m_initialFocus == INITIAL_FOCUS_HOT_KEY)
+	{
+		m_HotKey.SetFocus();
+	}
+	else
+	{
+		m_description.SetFocus();
+		if(m_initialFocus == INITIAL_FOCUS_ITEM_TITLE)
+		{
+			m_description.SetSel(0, -1);
+		}
 	}
 
 	return FALSE;

@@ -19,7 +19,14 @@ class CCopyProperties : public CDialog
 {
 // Construction
 public:
-	CCopyProperties(long lCopyID, CWnd* pParent = NULL, CClip *pMemoryClip = NULL);   // standard constructor
+	enum InitialFocus
+	{
+		INITIAL_FOCUS_DEFAULT,
+		INITIAL_FOCUS_ITEM_TITLE,
+		INITIAL_FOCUS_HOT_KEY
+	};
+
+	CCopyProperties(long lCopyID, CWnd* pParent = NULL, CClip *pMemoryClip = NULL, InitialFocus initialFocus = INITIAL_FOCUS_DEFAULT);   // standard constructor
 
 // Dialog Data
 	//{{AFX_DATA(CCopyProperties)
@@ -67,6 +74,7 @@ protected:
 	CBrush m_brush;
 	CClip m_clip;
 	bool m_mouseDownOnCaption;
+	InitialFocus m_initialFocus;
 
 	void LoadDataIntoCClip(CClip &Clip);
 	void LoadDataFromCClip(CClip &Clip);
