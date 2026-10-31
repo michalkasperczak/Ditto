@@ -15,9 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check focused clip property commands
+      - name: Check dedicated clip commands
         shell: pwsh
-        run: .\.github\scripts\Test-FocusedClipPropertyShortcuts.ps1
+        run: .\.github\scripts\Test-ClipCommandShortcuts.ps1
                   
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2

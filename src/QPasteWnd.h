@@ -21,7 +21,6 @@
 #include "Popup.h"
 #include "CustomFriendsHelper.h"
 #include "ModernScrollBar.h"
-#include "CopyProperties.h"
 
 class CMainTable
 {
@@ -263,7 +262,9 @@ public:
 	bool DoActionToggleShowPersistant();
 	bool DoActionDeleteSelected();
 	bool DoActionPasteSelected();
-	bool DoActionClipProperties(CCopyProperties::InitialFocus initialFocus = CCopyProperties::INITIAL_FOCUS_DEFAULT);
+	bool DoActionClipProperties();
+	bool DoActionRenameClip();
+	bool DoActionAssignClipHotKey();
 	bool DoActionPasteSelectedPlainText();
 	bool DoActionMoveClipToGroup();
 	bool DoActionElevatePrivleges();
@@ -336,7 +337,10 @@ public:
 	
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
-	bool ShowProperties(int id, int row, CCopyProperties::InitialFocus initialFocus = CCopyProperties::INITIAL_FOCUS_DEFAULT);
+	bool ShowProperties(int id, int row);
+	bool GetSelectedClipForCommand(int& id, int& row, CClip& clip);
+	bool SaveClipHotKey(CClip& clip, DWORD shortcut, BOOL globalShortcut);
+	void RefreshClipRow(int id, int row, bool reloadAccelerators);
 	bool DeleteClips(CClipIDs &IDs, ARRAY &Indexs);
 	void RemoveFromImageRtfCache(int row, int id = -1);
 	bool SyncClipDataToArrayData(CClip &clip);

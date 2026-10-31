@@ -428,6 +428,14 @@
 		
 		<Item English_Text = "Hot Key" ID = "QPHotKey"></Item>
 		<Item English_Text = "Command" ID = "QPCommand"></Item>
+		<Item English_Text = "Clip name" ID = "ClipNameLabel"></Item>
+		<Item English_Text = "Shortcut key" ID = "ClipHotKeyLabel"></Item>
+		<Item English_Text = "Include Windows key" ID = "ClipHotKeyWindows"></Item>
+		<Item English_Text = "Use this shortcut from any application" ID = "ClipHotKeyGlobal"></Item>
+		<Item English_Text = "Remove shortcut" ID = "ClipHotKeyRemove"></Item>
+		<Item English_Text = "This shortcut is already in use by Windows or another application. Choose a different shortcut." ID = "ClipHotKeyUnavailable"></Item>
+		<Item English_Text = "Ditto could not rename this clip." ID = "ClipRenameFailed"></Item>
+		<Item English_Text = "Ditto could not save this clip shortcut." ID = "ClipHotKeySaveFailed"></Item>
 		
 		//ID changed from "top_most"
 		<Item English_Text = "[Always on top]" ID = "top_window"></Item>
